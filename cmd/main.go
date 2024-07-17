@@ -9,15 +9,18 @@ import (
 	"CloudStorage/pkg/config"
 	"CloudStorage/pkg/database"
 	"CloudStorage/pkg/http"
+	"CloudStorage/pkg/logger"
 )
 
 func main() {
 	conf := config.NewConfig()
 
-	db := database.NewDatabase(conf)
-	repo := repositories.NewRepository(db)
-	svc := services.NewService(repo, conf)
-	handlers := handlers.NewHandler(svc)
+	logger := logger.NewLogger(conf)
+
+	db := database.NewDatabase(conf, logger)
+	repo := repositories.NewRepository(db, logger)
+	svc := services.NewService(repo, conf, logger)
+	handlers := handlers.NewHandler(svc, logger)
 
 	middle := middleware.NewMiddleware(conf, svc)
 

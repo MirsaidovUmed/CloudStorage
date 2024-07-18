@@ -26,7 +26,7 @@ func main() {
 
 	router := router.InitRouter(handlers, middle)
 
-	server := http.NewServer(conf.ServerAddress, conf.ServerPort, router)
+	server := http.NewServer(conf.ServerAddress, conf.ServerPort, router, logger)
 
 	server.Run()
 }

@@ -1,25 +1,91 @@
 package logger
 
 import (
-	"CloudStorage/pkg/config"
 	"io"
 	"os"
 
+	"github.com/mattn/go-colorable"
 	"github.com/sirupsen/logrus"
 )
 
-func NewLogger(config *config.Config) *logrus.Logger {
-	f, err := os.OpenFile(config.LogPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0o777)
+var logger *logrus.Logger
+
+type fileHook struct {
+	LevelsArr []logrus.Level
+	Files     map[logrus.Level]*os.File
+}
+
+func init() {
+	logger = logrus.New()
+
+	logger.SetReportCaller(true)
+	logger.SetLevel(logrus.DebugLevel)
+	logger.SetFormatter(&logrus.TextFormatter{
+		ForceColors:   true,
+		FullTimestamp: true,
+	})
+
+	infoFile, err := os.OpenFile("./logs/info.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		panic(err)
+		logrus.Fatal("Не удалось создать файл info.log", err)
 	}
 
-	log := &logrus.Logger{
-		Out:       io.MultiWriter(f, os.Stdout),
-		Level:     logrus.DebugLevel,
-		Formatter: &logrus.TextFormatter{},
+	debugFile, err := os.OpenFile("./logs/debug.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		logrus.Fatal("Не удалось создать файл debug.log", err)
 	}
-	log.SetReportCaller(true)
 
-	return log
+	errorFile, err := os.OpenFile("./logs/error.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		logrus.Fatal("Не удалось создать файл error.log", err)
+	}
+
+	warnFile, err := os.OpenFile("./logs/warn.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		logrus.Fatal("Не удалось создать файл warn.log: ", err)
+	}
+
+	logger.AddHook(&fileHook{
+		LevelsArr: []logrus.Level{
+			logrus.ErrorLevel,
+			logrus.WarnLevel,
+			logrus.InfoLevel,
+			logrus.DebugLevel,
+		},
+		Files: map[logrus.Level]*os.File{
+			logrus.ErrorLevel: errorFile,
+			logrus.WarnLevel:  warnFile,
+			logrus.InfoLevel:  infoFile,
+			logrus.DebugLevel: debugFile,
+		},
+	})
+}
+
+func (hook *fileHook) Fire(entry *logrus.Entry) error {
+	for _, level := range hook.LevelsArr {
+		if entry.Level <= level {
+			entry.Logger.Out = io.MultiWriter(hook.Files[level], colorable.NewColorableStdout())
+			break
+		}
+	}
+	return nil
+}
+
+func (hook *fileHook) Levels() []logrus.Level {
+	return hook.LevelsArr
+}
+
+func CloseFile() {
+	fileHook, ok := logger.Hooks[logrus.ErrorLevel][0].(*fileHook)
+	if ok {
+		for _, file := range fileHook.Files {
+			if err := file.Close(); err != nil {
+				logger.Errorf("Failed to close log file: %s", err)
+			}
+		}
+	}
+}
+
+func NewLogger() *logrus.Logger {
+	return logger
 }

@@ -1,6 +1,5 @@
 {
     "server_address" : "127.0.0.1",
     "server_port":5000,
-    "postgres_url" : "postgres://postgres:postgres@localhost:5432/cloud_storage",
-    "log_path" : "./log.log"
+    "postgres_url" : "postgres://postgres:postgres@localhost:5432/cloud_storage"
 }

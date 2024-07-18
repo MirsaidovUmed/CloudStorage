@@ -15,7 +15,7 @@ import (
 func main() {
 	conf := config.NewConfig()
 
-	logger := logger.NewLogger(conf)
+	logger := logger.NewLogger()
 
 	db := database.NewDatabase(conf, logger)
 	repo := repositories.NewRepository(db, logger)

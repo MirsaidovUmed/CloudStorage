@@ -9,7 +9,6 @@ type Config struct {
 	ServerAddress string `json:"server_address"`
 	ServerPort    int    `json:"server_port"`
 	PostgresUrl   string `json:"postgres_url"`
-	LogPath       string `json:"log_path"`
 }
 
 func NewConfig() *Config {

@@ -9,6 +9,7 @@ type Config struct {
 	ServerAddress string `json:"server_address"`
 	ServerPort    int    `json:"server_port"`
 	PostgresUrl   string `json:"postgres_url"`
+	JwtSecretKey  string `json:"jwt_secret_key"`
 }
 
 func NewConfig() *Config {

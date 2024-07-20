@@ -12,7 +12,7 @@ func (repo *Repository) GetUserList() (users []models.User, err error) {
 	if err != nil {
 		repo.Logger.WithFields(logrus.Fields{
 			"err": err,
-		}).Error("error in repo, GetAllUsers")
+		}).Error("error in repo, GetUserList")
 		return nil, err
 	}
 	defer rows.Close()
@@ -23,7 +23,7 @@ func (repo *Repository) GetUserList() (users []models.User, err error) {
 		if err != nil {
 			repo.Logger.WithFields(logrus.Fields{
 				"err": err,
-			}).Error("error scanning row in GetAllUsers")
+			}).Error("error scanning row in GetUserList")
 			return nil, err
 		}
 		users = append(users, user)
@@ -32,7 +32,7 @@ func (repo *Repository) GetUserList() (users []models.User, err error) {
 	if err = rows.Err(); err != nil {
 		repo.Logger.WithFields(logrus.Fields{
 			"err": err,
-		}).Error("error iterating rows in GetAllUsers")
+		}).Error("error iterating rows in GetUserList")
 		return nil, err
 	}
 

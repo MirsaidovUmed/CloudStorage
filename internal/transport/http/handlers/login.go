@@ -5,7 +5,10 @@ import (
 	"CloudStorage/pkg/errors"
 	"CloudStorage/pkg/response"
 	"encoding/json"
+	"fmt"
 	"net/http"
+
+	"github.com/go-playground/validator/v10"
 )
 
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
@@ -18,6 +21,15 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&inputData)
 	if err != nil {
 		resp = response.BadRequest
+		return
+	}
+
+	validate := validator.New()
+
+	err = validate.Struct(inputData)
+	if err != nil {
+		resp.Code = http.StatusBadRequest
+		resp.Message = fmt.Sprintf("Invalid input data : %v", err)
 		return
 	}
 

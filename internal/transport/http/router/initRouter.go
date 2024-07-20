@@ -12,5 +12,6 @@ func InitRouter(handlers *handlers.Handler, mw middleware.MiddlewareInterface) *
 	router := http.NewRouter()
 
 	router.HandleFunc("/api/registration", handlers.Registration).Methods("POST")
+	router.HandleFunc("/api/login", handlers.Login).Methods("POST")
 	return router
 }

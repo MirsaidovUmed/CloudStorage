@@ -4,7 +4,7 @@ import "time"
 
 type User struct {
 	Id         int       `json:"id"`
-	FirstName  string    `json:"first_name"  validate:"required"`
+	FirstName  string    `json:"first_name"`
 	SecondName string    `json:"second_name"`
 	Email      string    `json:"email" validate:"required,email"`
 	Password   string    `json:"password" validate:"required,min=8"`

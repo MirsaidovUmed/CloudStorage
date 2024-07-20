@@ -15,6 +15,7 @@ func (s *Service) Registration(user models.User) (err error) {
 		if err == nil {
 			return errors.ErrAlreadyHasUser
 		}
+		return
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)

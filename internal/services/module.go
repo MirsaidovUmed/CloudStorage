@@ -17,6 +17,7 @@ type Service struct {
 type ServiceInterface interface {
 	Registration(user models.User) (err error)
 	CheckUserById(userID int) (err error)
+	Login(user models.User) (accessToken string, err error)
 }
 
 func NewService(repo repositories.RepositoryInterface, config *config.Config, logger *logrus.Logger) ServiceInterface {

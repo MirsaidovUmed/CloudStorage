@@ -10,5 +10,4 @@ type User struct {
 	Password   string    `json:"password" validate:"required,min=8"`
 	Role       Role      `json:"role_id"`
 	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
 }

@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -9,7 +8,6 @@ import (
 )
 
 func CreateToken(secretKey string, id int, roleId int) (accessToken string, err error) {
-	fmt.Println(secretKey)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{

@@ -22,6 +22,6 @@ func (s *Service) Login(user models.UserCreateDto) (accessToken string, err erro
 		return "", err
 	}
 
-	accessToken, err = utils.CreateToken(s.Config.JwtSecretKey, userFromDb.Id, user.Role.Id)
+	accessToken, err = utils.CreateToken(s.Config.JwtSecretKey, userFromDb.Id, userFromDb.Role.Id)
 	return accessToken, err
 }

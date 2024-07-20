@@ -13,6 +13,7 @@ type Middleware struct {
 
 type MiddlewareInterface interface {
 	TimeDuration(next http.Handler) http.Handler
+	JWT(next http.Handler) http.Handler
 }
 
 func NewMiddleware(config *config.Config, svc services.ServiceInterface) MiddlewareInterface {

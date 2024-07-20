@@ -15,7 +15,6 @@ func (s *Service) Registration(user models.User) (err error) {
 		if err == nil {
 			return errors.ErrAlreadyHasUser
 		}
-		return
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
@@ -26,9 +25,13 @@ func (s *Service) Registration(user models.User) (err error) {
 
 	user.Password = string(hashedPassword)
 
+	if user.Role.Id == 0 {
+		user.Role.Id = 2
+	}
+
 	err = s.Repo.CreateUser(user)
 	if err != nil {
-		logrus.Error("Error CreateUser in Registration", err)
+		logrus.Error("Error CreateUser in Registration ", err)
 		return err
 	}
 

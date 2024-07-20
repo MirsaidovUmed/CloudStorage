@@ -10,7 +10,6 @@ import (
 
 func InitRouter(handlers *handlers.Handler, mw middleware.MiddlewareInterface) *mux.Router {
 	router := http.NewRouter()
-	router.Use(mw.TimeDuration)
 
 	router.HandleFunc("/api/registration", handlers.Registration).Methods("POST")
 	return router

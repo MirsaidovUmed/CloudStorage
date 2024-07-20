@@ -8,7 +8,7 @@ import (
 )
 
 func (repo *Repository) GetUserByEmail(user models.User) (userFromDB models.User, err error) {
-	row := repo.Conn.QueryRow(context.Background(), `SELECT * FROM users WHERE email = $2`, user.Email)
+	row := repo.Conn.QueryRow(context.Background(), `SELECT * FROM users WHERE email = $1`, user.Email)
 
 	err = row.Scan(&userFromDB.Id, &userFromDB.FirstName, &userFromDB.SecondName, &userFromDB.Email, &userFromDB.Password, &userFromDB.Role.Id)
 

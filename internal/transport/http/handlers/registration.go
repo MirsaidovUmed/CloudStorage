@@ -5,6 +5,7 @@ import (
 	"CloudStorage/pkg/errors"
 	"CloudStorage/pkg/response"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -27,7 +28,7 @@ func (h *Handler) Registration(w http.ResponseWriter, r *http.Request) {
 	err = validate.Struct(inputData)
 	if err != nil {
 		resp.Code = http.StatusBadRequest
-		resp.Message = "Invalid input data"
+		resp.Message = fmt.Sprintf("Invalid input data : %v", err)
 		return
 	}
 

@@ -16,6 +16,7 @@ type Server struct {
 }
 
 func (s *Server) Run() {
+	fmt.Println("Server running on", fmt.Sprintf("%v:%v", s.Address, s.Port))
 	http.ListenAndServe(fmt.Sprintf("%v:%v", s.Address, s.Port), s.Mux)
 }
 

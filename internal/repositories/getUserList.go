@@ -8,7 +8,7 @@ import (
 )
 
 func (repo *Repository) GetUserList() (users []models.UserCreateDto, err error) {
-	rows, err := repo.Conn.Query(context.Background(), `SELECT id, first_name, second_name, email, password, role_id FROM users`)
+	rows, err := repo.Conn.Query(context.Background(), `SELECT id, first_name, second_name, email FROM users`)
 	if err != nil {
 		repo.Logger.WithFields(logrus.Fields{
 			"err": err,
@@ -19,7 +19,7 @@ func (repo *Repository) GetUserList() (users []models.UserCreateDto, err error) 
 
 	for rows.Next() {
 		var user models.UserCreateDto
-		err := rows.Scan(&user.Id, &user.FirstName, &user.SecondName, &user.Email, &user.Password, &user.Role.Id)
+		err := rows.Scan(&user.Id, &user.FirstName, &user.SecondName, &user.Email)
 		if err != nil {
 			repo.Logger.WithFields(logrus.Fields{
 				"err": err,

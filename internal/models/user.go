@@ -9,8 +9,8 @@ type UserCreateDto struct {
 	FirstName  string    `json:"first_name"`
 	SecondName string    `json:"second_name"`
 	Email      string    `json:"email" validate:"required,email"`
-	Password   string    `json:"password" validate:"required,min=8"`
-	Role       Role      `json:"role_id"`
+	Password   string    `json:"password,omitempty" validate:"required,min=8"`
+	Role       Role      `json:"role_id,omitempty"`
 	CreatedAt  time.Time `json:"created_at"`
 }
 

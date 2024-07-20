@@ -2,6 +2,7 @@ package services
 
 import (
 	"CloudStorage/internal/models"
+	"CloudStorage/pkg/errors"
 
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -10,8 +11,11 @@ import (
 func (s *Service) Registration(user models.User) (err error) {
 	_, err = s.Repo.GetUserByEmail(user)
 
-	if err != nil {
-		return err
+	if err != errors.ErrDataNotFound {
+		if err == nil {
+			return errors.ErrAlreadyHasUser
+		}
+		return
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)

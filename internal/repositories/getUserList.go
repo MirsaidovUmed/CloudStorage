@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (repo *Repository) GetUserList() (users []models.User, err error) {
+func (repo *Repository) GetUserList() (users []models.UserCreateDto, err error) {
 	rows, err := repo.Conn.Query(context.Background(), `SELECT id, first_name, second_name, email, password, role_id FROM users`)
 	if err != nil {
 		repo.Logger.WithFields(logrus.Fields{
@@ -18,7 +18,7 @@ func (repo *Repository) GetUserList() (users []models.User, err error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var user models.User
+		var user models.UserCreateDto
 		err := rows.Scan(&user.Id, &user.FirstName, &user.SecondName, &user.Email, &user.Password, &user.Role.Id)
 		if err != nil {
 			repo.Logger.WithFields(logrus.Fields{

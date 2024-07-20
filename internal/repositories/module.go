@@ -13,10 +13,11 @@ type Repository struct {
 }
 
 type RepositoryInterface interface {
-	CreateUser(user models.User) (err error)
-	GetUserByEmail(user models.User) (userFromDB models.User, err error)
-	CheckUserById(userID int) (err error)
-	GetUserList() (users []models.User, err error)
+	CreateUser(user models.UserCreateDto) (err error)
+	GetUserByEmail(email string) (userFromDB models.UserCreateDto, err error)
+	GetUserList() (users []models.UserCreateDto, err error)
+	GetUserByID(id int) (user models.UserCreateDto, err error)
+	UpdateUser(user models.UserUpdateDto) (err error)
 }
 
 func NewRepository(conn *pgx.Conn, logger *logrus.Logger) RepositoryInterface {

@@ -15,7 +15,7 @@ func (h *Handler) Registration(w http.ResponseWriter, r *http.Request) {
 	var resp response.Response
 	defer resp.WriteJSON(w)
 
-	var inputData models.User
+	var inputData models.UserCreateDto
 
 	err := json.NewDecoder(r.Body).Decode(&inputData)
 	if err != nil {

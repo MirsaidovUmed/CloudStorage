@@ -8,8 +8,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *Service) Login(user models.User) (accessToken string, err error) {
-	userFromDb, err := s.Repo.GetUserByEmail(user)
+func (s *Service) Login(user models.UserCreateDto) (accessToken string, err error) {
+	userFromDb, err := s.Repo.GetUserByEmail(user.Email)
 	if err != nil {
 		return "", err
 	}

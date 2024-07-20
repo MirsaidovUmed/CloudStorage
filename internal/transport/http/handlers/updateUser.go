@@ -11,12 +11,11 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	var resp response.Response
-
 	defer resp.WriteJSON(w)
 
-	var inputData models.UserCreateDto
+	var inputData models.UserUpdateDto
 
 	err := json.NewDecoder(r.Body).Decode(&inputData)
 	if err != nil {
@@ -25,7 +24,6 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	validate := validator.New()
-
 	err = validate.Struct(inputData)
 	if err != nil {
 		resp.Code = http.StatusBadRequest
@@ -33,15 +31,14 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := h.svc.Login(inputData)
-
+	err = h.svc.UpdateUser(inputData)
 	if err != nil {
-		if err == errors.ErrDataNotFound {
-			resp = response.NotFound
+		if err == errors.ErrWrongPassword {
+			resp.Code = http.StatusUnauthorized
+			resp.Message = "Wrong current password"
 			return
-		} else if err == errors.ErrWrongPassword {
-			resp.Code = 401
-			resp.Message = "Wrong Password"
+		} else if err == errors.ErrDataNotFound {
+			resp = response.NotFound
 			return
 		} else {
 			resp = response.InternalServer
@@ -50,5 +47,4 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp = response.Success
-	resp.Payload = token
 }

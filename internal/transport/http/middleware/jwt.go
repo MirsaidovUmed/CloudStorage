@@ -86,7 +86,7 @@ func (mw *Middleware) JWT(next http.Handler) http.Handler {
 			return
 		}
 
-		err = mw.service.CheckUserById(int(userID))
+		_, err = mw.service.GetUserByID(int(userID))
 
 		if err != nil {
 			resp = response.Unauthorized

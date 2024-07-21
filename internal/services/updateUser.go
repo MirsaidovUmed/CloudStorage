@@ -2,6 +2,7 @@ package services
 
 import (
 	"CloudStorage/internal/models"
+	"CloudStorage/pkg/errors"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -15,19 +16,26 @@ func (s *Service) UpdateUser(user models.UserUpdateDto) (err error) {
 	existingUserUpdate := existingUser.ToUserUpdateDto()
 
 	if user.FirstName != models.UnsetValue {
-		existingUser.FirstName = user.FirstName
+		existingUserUpdate.FirstName = user.FirstName
 	}
 
 	if user.SecondName != models.UnsetValue {
-		existingUser.SecondName = user.SecondName
+		existingUserUpdate.SecondName = user.SecondName
 	}
 
 	if user.Password != models.UnsetValue {
+		err = bcrypt.CompareHashAndPassword([]byte(existingUser.Password), []byte(user.Password))
+		if err == nil {
+			return errors.ErrWrongPassword
+		} else if err != bcrypt.ErrMismatchedHashAndPassword {
+			return err
+		}
+
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 		if err != nil {
 			return err
 		}
-		existingUser.Password = string(hashedPassword)
+		existingUserUpdate.Password = string(hashedPassword)
 	}
 
 	err = s.Repo.UpdateUser(existingUserUpdate)

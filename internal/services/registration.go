@@ -14,6 +14,7 @@ func (s *Service) Registration(user models.UserCreateDto) (err error) {
 	if err != errors.ErrDataNotFound {
 		if err == nil {
 			return errors.ErrAlreadyHasUser
+
 		}
 		return
 	}

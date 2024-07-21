@@ -18,5 +18,6 @@ func InitRouter(handlers *handlers.Handler, mw middleware.MiddlewareInterface) *
 	privateRouter.HandleFunc("/user/list", handlers.GetUserList).Methods("GET")
 	privateRouter.HandleFunc("/user/get/{id}", handlers.GetUserByID).Methods("GET")
 	privateRouter.HandleFunc("/user/update", handlers.UpdateUser).Methods("PUT")
+	privateRouter.HandleFunc("/admin/users/delete/{id}", handlers.DeleteUser).Methods("DELETE")
 	return router
 }

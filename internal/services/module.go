@@ -20,6 +20,7 @@ type ServiceInterface interface {
 	GetUserList() (users []models.UserCreateDto, err error)
 	GetUserByID(id int) (user models.UserCreateDto, err error)
 	UpdateUser(user models.UserUpdateDto) (err error)
+	DeleteUser(userId int) (err error)
 }
 
 func NewService(repo repositories.RepositoryInterface, config *config.Config, logger *logrus.Logger) ServiceInterface {

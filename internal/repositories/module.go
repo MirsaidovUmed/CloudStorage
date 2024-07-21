@@ -24,6 +24,7 @@ type RepositoryInterface interface {
 	GetFileById(id, userId int) (file models.File, err error)
 	RemoveFile(id, userId int) (err error)
 	RenameFile(id, userId int, newFileName string) (err error)
+	AdminGetUserList() (users []models.UserCreateDto, err error)
 }
 
 func NewRepository(conn *pgx.Conn, logger *logrus.Logger) RepositoryInterface {

@@ -5,11 +5,11 @@ import (
 	"net/http"
 )
 
-func (h *Handler) AdminGetUserList(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetUserList(w http.ResponseWriter, r *http.Request) {
 	var resp response.Response
 	defer resp.WriteJSON(w)
 
-	users, err := h.svc.GetUserList()
+	users, err := h.svc.AdminGetUserList()
 	if err != nil {
 		resp = response.InternalServer
 		return

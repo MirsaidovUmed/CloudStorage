@@ -26,6 +26,7 @@ type ServiceInterface interface {
 	GetFileList(userId int) (files []models.File, err error)
 	GetFileById(id, userId int) (file models.File, err error)
 	RemoveFile(id, userId int) error
+	RenameFile(id, userId int, newFileName string) (err error)
 }
 
 func NewService(repo repositories.RepositoryInterface, config *config.Config, logger *logrus.Logger) ServiceInterface {

@@ -82,3 +82,14 @@ func (repo *Repository) RemoveFile(id, userId int) (err error) {
 	}
 	return
 }
+
+func (repo *Repository) RenameFile(id, userId int, newFileName string) (err error) {
+	_, err = repo.Conn.Exec(context.Background(), `UPDATE files SET file_name = $1 WHERE id = $2 AND user_id = $3`, newFileName, id, userId)
+	if err != nil {
+		repo.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in repo, RenameFile")
+		return err
+	}
+	return nil
+}

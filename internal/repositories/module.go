@@ -19,6 +19,7 @@ type RepositoryInterface interface {
 	GetUserByID(id int) (user models.UserCreateDto, err error)
 	UpdateUser(user models.UserUpdateDto) (err error)
 	DeleteUser(userId int) (err error)
+	SaveFile(file models.File) (err error)
 }
 
 func NewRepository(conn *pgx.Conn, logger *logrus.Logger) RepositoryInterface {

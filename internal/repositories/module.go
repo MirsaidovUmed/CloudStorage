@@ -21,6 +21,7 @@ type RepositoryInterface interface {
 	DeleteUser(userId int) (err error)
 	SaveFile(file models.File) (err error)
 	GetFileList(userId int) (files []models.File, err error)
+	GetFileById(id, userId int) (file models.File, err error)
 }
 
 func NewRepository(conn *pgx.Conn, logger *logrus.Logger) RepositoryInterface {

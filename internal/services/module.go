@@ -24,6 +24,7 @@ type ServiceInterface interface {
 	DeleteUser(userId int) (err error)
 	UploadFile(userID int, file multipart.File, header *multipart.FileHeader) (err error)
 	GetFileList(userId int) (files []models.File, err error)
+	GetFileById(id, userId int) (file models.File, err error)
 }
 
 func NewService(repo repositories.RepositoryInterface, config *config.Config, logger *logrus.Logger) ServiceInterface {

@@ -8,7 +8,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/context"
-	"github.com/sirupsen/logrus"
 )
 
 func (mw *Middleware) JWT(next http.Handler) http.Handler {
@@ -16,7 +15,6 @@ func (mw *Middleware) JWT(next http.Handler) http.Handler {
 		var resp response.Response
 
 		token := r.Header.Get("Authorization")
-		logrus.Debug("Authorization token: ", token)
 
 		tokenList := strings.Split(token, " ")
 

@@ -26,5 +26,7 @@ func InitRouter(handlers *handlers.Handler, mw middleware.MiddlewareInterface) *
 	privateRouter.HandleFunc("/files/get/{id}", handlers.GetFileById).Methods("GET")
 	privateRouter.HandleFunc("/files/remove/{id}", handlers.DeleteFile).Methods("DELETE")
 	privateRouter.HandleFunc("/files/rename/{id}", handlers.RenameFile).Methods("PUT")
+
+	privateRouter.HandleFunc("/directories/create", handlers.CreateDirectory).Methods("POST")
 	return router
 }

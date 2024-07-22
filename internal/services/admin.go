@@ -1,6 +1,17 @@
 package services
 
-import "CloudStorage/pkg/errors"
+import (
+	"CloudStorage/internal/models"
+	"CloudStorage/pkg/errors"
+)
+
+func (s *Service) AdminGetUserList() (users []models.UserCreateDto, err error) {
+	users, err = s.Repo.AdminGetUserList()
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
 
 func (s *Service) DeleteUser(userId int) (err error) {
 	_, err = s.Repo.GetUserByID(userId)

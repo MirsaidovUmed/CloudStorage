@@ -22,7 +22,7 @@ type ServiceInterface interface {
 	GetUserByID(id int) (user models.UserCreateDto, err error)
 	UpdateUser(user models.UserUpdateDto) (err error)
 	DeleteUser(userId int) (err error)
-	UploadFile(userID int, file multipart.File, header *multipart.FileHeader) (err error)
+	UploadFile(userID int, directoryID int, file multipart.File, header *multipart.FileHeader) (err error)
 	GetFileList(userId int) (files []models.File, err error)
 	GetFileById(id, userId int) (file models.File, err error)
 	RemoveFile(id, userId int) error

@@ -9,14 +9,17 @@ import (
 )
 
 func (repo *Repository) SaveFile(file models.File) (err error) {
-	_, err = repo.Conn.Exec(context.Background(), `INSERT INTO files (file_name, user_id, created_at) VALUES ($1, $2, $3)`, file.FileName, file.UserId, file.CreatedAt)
+	_, err = repo.Conn.Exec(context.Background(), `
+		INSERT INTO files (file_name, user_id, directory_id)
+		VALUES ($1, $2, $3)`,
+		file.FileName, file.UserId, file.DirectoryId)
 	if err != nil {
 		repo.Logger.WithFields(logrus.Fields{
 			"err": err,
-		}).Error("error in repo, RemoveFile")
+		}).Error("error in repo, SaveFile")
 		return err
 	}
-	return
+	return nil
 }
 
 func (repo *Repository) GetFileById(id, userId int) (file models.File, err error) {

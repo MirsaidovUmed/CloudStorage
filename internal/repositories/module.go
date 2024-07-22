@@ -27,6 +27,7 @@ type RepositoryInterface interface {
 	AdminGetUserList() (users []models.UserCreateDto, err error)
 	CreateDirectory(directory models.Directory) (err error)
 	GetDirectoryById(id, userId int) (directory models.Directory, err error)
+	GetRootDirectoryByUserId(userId int) (directory int, err error)
 }
 
 func NewRepository(conn *pgx.Conn, logger *logrus.Logger) RepositoryInterface {

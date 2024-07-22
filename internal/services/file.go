@@ -16,6 +16,7 @@ func (s *Service) UploadFile(userID int, directoryID int, file multipart.File, h
 	var uploadDir string
 	if directoryID == 0 {
 		uploadDir = filepath.Join("uploads", strconv.Itoa(userID))
+		directoryID, err = s.Repo.GetRootDirectoryByUserId(userID)
 	} else {
 		directory, err := s.GetDirectoryById(directoryID, userID)
 		if err != nil {
@@ -46,8 +47,6 @@ func (s *Service) UploadFile(userID int, directoryID int, file multipart.File, h
 		UserId:      userID,
 		DirectoryId: directoryID,
 	}
-
-	fmt.Println(fileModel)
 
 	err = s.Repo.SaveFile(fileModel)
 	if err != nil {

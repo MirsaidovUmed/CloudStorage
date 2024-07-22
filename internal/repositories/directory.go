@@ -32,3 +32,15 @@ func (repo *Repository) GetDirectoryById(id, userId int) (directory models.Direc
 	}
 	return directory, nil
 }
+
+func (repo *Repository) GetRootDirectoryByUserId(userId int) (directoryId int, err error) {
+	err = repo.Conn.QueryRow(context.Background(), `
+	SELECT id FROM directories WHERE user_id = $1`, userId).Scan(&directoryId)
+	if err != nil {
+		repo.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in repo, GetRootDirectoryByUserId")
+		return 0, err
+	}
+	return directoryId, nil
+}

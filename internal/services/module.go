@@ -29,6 +29,7 @@ type ServiceInterface interface {
 	RenameFile(id, userId int, newFileName string) (err error)
 	AdminGetUserList() (users []models.User, err error)
 	CreateDirectory(directory models.Directory) (err error)
+	AdminUpdateUser(user models.UserUpdateDto) (err error)
 }
 
 func NewService(repo repositories.RepositoryInterface, config *config.Config, logger *logrus.Logger) ServiceInterface {

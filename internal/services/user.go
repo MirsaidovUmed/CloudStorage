@@ -86,7 +86,7 @@ func (s *Service) Login(user models.UserCreateDto) (accessToken string, err erro
 	return accessToken, err
 }
 
-func (s *Service) GetUserByID(id int) (user models.UserCreateDto, err error) {
+func (s *Service) GetUserByID(id int) (user models.User, err error) {
 	user, err = s.Repo.GetUserByID(id)
 	if err != nil {
 		return
@@ -94,7 +94,7 @@ func (s *Service) GetUserByID(id int) (user models.UserCreateDto, err error) {
 	return user, nil
 }
 
-func (s *Service) GetUserList() (users []models.UserCreateDto, err error) {
+func (s *Service) GetUserList() (users []models.User, err error) {
 	users, err = s.Repo.GetUserList()
 	if err != nil {
 		return nil, err

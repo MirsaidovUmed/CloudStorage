@@ -14,9 +14,9 @@ type Repository struct {
 
 type RepositoryInterface interface {
 	CreateUser(user models.UserCreateDto) (err error)
-	GetUserByEmail(email string) (userFromDB models.UserCreateDto, err error)
-	GetUserList() (users []models.UserCreateDto, err error)
-	GetUserByID(id int) (user models.UserCreateDto, err error)
+	GetUserByEmail(email string) (userFromDB models.User, err error)
+	GetUserList() (users []models.User, err error)
+	GetUserByID(id int) (user models.User, err error)
 	UpdateUser(user models.UserUpdateDto) (err error)
 	DeleteUser(userId int) (err error)
 	SaveFile(file models.File) (err error)
@@ -24,7 +24,7 @@ type RepositoryInterface interface {
 	GetFileById(id, userId int) (file models.File, err error)
 	RemoveFile(id, userId int) (err error)
 	RenameFile(id, userId int, newFileName string) (err error)
-	AdminGetUserList() (users []models.UserCreateDto, err error)
+	AdminGetUserList() (users []models.User, err error)
 	CreateDirectory(directory models.Directory) (err error)
 	GetDirectoryById(id, userId int) (directory models.Directory, err error)
 	GetRootDirectoryByUserId(userId int) (directory int, err error)

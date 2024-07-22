@@ -5,7 +5,7 @@ import (
 	"CloudStorage/pkg/errors"
 )
 
-func (s *Service) AdminGetUserList() (users []models.UserCreateDto, err error) {
+func (s *Service) AdminGetUserList() (users []models.User, err error) {
 	users, err = s.Repo.AdminGetUserList()
 	if err != nil {
 		return nil, err

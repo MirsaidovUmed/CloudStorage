@@ -22,7 +22,7 @@ func (repo *Repository) CreateUser(user models.UserCreateDto) (err error) {
 	return
 }
 
-func (repo *Repository) GetUserByEmail(email string) (userFromDB models.UserCreateDto, err error) {
+func (repo *Repository) GetUserByEmail(email string) (userFromDB models.User, err error) {
 	row := repo.Conn.QueryRow(context.Background(), `SELECT id, first_name, second_name, email, password, role_id FROM users WHERE email = $1`, email)
 
 	err = row.Scan(&userFromDB.Id, &userFromDB.FirstName, &userFromDB.SecondName, &userFromDB.Email, &userFromDB.Password, &userFromDB.Role.Id)
@@ -31,13 +31,13 @@ func (repo *Repository) GetUserByEmail(email string) (userFromDB models.UserCrea
 		repo.Logger.WithFields(logrus.Fields{
 			"err": err,
 		}).Error("error in repo, GetUserByEmail")
-		return models.UserCreateDto{}, errors.ErrDataNotFound
+		return models.User{}, errors.ErrDataNotFound
 	}
 
 	return
 }
 
-func (repo *Repository) GetUserByID(id int) (user models.UserCreateDto, err error) {
+func (repo *Repository) GetUserByID(id int) (user models.User, err error) {
 	row := repo.Conn.QueryRow(context.Background(), `SELECT id, first_name, second_name, email, role_id, created_at FROM users WHERE id = $1`, id)
 
 	err = row.Scan(&user.Id, &user.FirstName, &user.SecondName, &user.Email, &user.Role.Id, &user.CreatedAt)
@@ -70,7 +70,7 @@ func (repo *Repository) UpdateUser(user models.UserUpdateDto) (err error) {
 	return
 }
 
-func (repo *Repository) GetUserList() (users []models.UserCreateDto, err error) {
+func (repo *Repository) GetUserList() (users []models.User, err error) {
 	rows, err := repo.Conn.Query(context.Background(), `SELECT id, first_name, second_name, email FROM users`)
 	if err != nil {
 		repo.Logger.WithFields(logrus.Fields{
@@ -81,7 +81,7 @@ func (repo *Repository) GetUserList() (users []models.UserCreateDto, err error) 
 	defer rows.Close()
 
 	for rows.Next() {
-		var user models.UserCreateDto
+		var user models.User
 		err := rows.Scan(&user.Id, &user.FirstName, &user.SecondName, &user.Email)
 		if err != nil {
 			repo.Logger.WithFields(logrus.Fields{

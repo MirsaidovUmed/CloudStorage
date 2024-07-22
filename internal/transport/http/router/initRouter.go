@@ -20,6 +20,8 @@ func InitRouter(handlers *handlers.Handler, mw middleware.MiddlewareInterface) *
 	privateRouter.HandleFunc("/user/update", handlers.UpdateUser).Methods("PUT")
 	privateRouter.HandleFunc("/admin/users/delete/{id}", handlers.DeleteUser).Methods("DELETE")
 	privateRouter.HandleFunc("/admin/users/list", handlers.AdminGetUserList).Methods("GET")
+	//privateRouter.HandleFunc("/admin/users/update/{id}", handlers.AdminUpdateUserById).Methods("PUT")
+	//privateRouter.HandleFunc("/admin/users/get/{id}", handlers.AdminGetUserById).Methods("GET")
 
 	privateRouter.HandleFunc("/files/upload", handlers.UploadFile).Methods("POST")
 	privateRouter.HandleFunc("/files/list", handlers.GetFileList).Methods("GET")
@@ -28,5 +30,8 @@ func InitRouter(handlers *handlers.Handler, mw middleware.MiddlewareInterface) *
 	privateRouter.HandleFunc("/files/rename/{id}", handlers.RenameFile).Methods("PUT")
 
 	privateRouter.HandleFunc("/directories/create", handlers.CreateDirectory).Methods("POST")
+	//privateRouter.HandleFunc("/directories/rename", handlers.RenameDirectory).Methods("POST")
+	//privateRouter.HandleFunc("/directories/get/{id}", handlers.GetDirectoryById).Methods("Get")
+	//privateRouter.HandleFunc("/directories/delete/{id}", handlers.DeleteDirectory).Methods("DELETE")
 	return router
 }

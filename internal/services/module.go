@@ -18,8 +18,8 @@ type Service struct {
 type ServiceInterface interface {
 	Registration(user models.UserCreateDto) (err error)
 	Login(user models.UserCreateDto) (accessToken string, err error)
-	GetUserList() (users []models.UserCreateDto, err error)
-	GetUserByID(id int) (user models.UserCreateDto, err error)
+	GetUserList() (users []models.User, err error)
+	GetUserByID(id int) (user models.User, err error)
 	UpdateUser(user models.UserUpdateDto) (err error)
 	DeleteUser(userId int) (err error)
 	UploadFile(userID int, directoryID int, file multipart.File, header *multipart.FileHeader) (err error)
@@ -27,7 +27,7 @@ type ServiceInterface interface {
 	GetFileById(id, userId int) (file models.File, err error)
 	RemoveFile(id, userId int) error
 	RenameFile(id, userId int, newFileName string) (err error)
-	AdminGetUserList() (users []models.UserCreateDto, err error)
+	AdminGetUserList() (users []models.User, err error)
 	CreateDirectory(directory models.Directory) (err error)
 }
 

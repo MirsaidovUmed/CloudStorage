@@ -44,3 +44,14 @@ func (repo *Repository) GetRootDirectoryByUserId(userId int) (directoryId int, e
 	}
 	return directoryId, nil
 }
+
+func (repo *Repository) RenameDirectory(id, userId int, newDirName string) (err error) {
+	_, err = repo.Conn.Exec(context.Background(), `UPDATE directories SET name = $1 WHERE id = $2 AND user_id = $3`, newDirName, id, userId)
+	if err != nil {
+		repo.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in repo, RenameDirectory")
+		return err
+	}
+	return nil
+}

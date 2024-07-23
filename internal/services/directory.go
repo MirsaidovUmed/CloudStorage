@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 func (s *Service) CreateDirectory(directory models.Directory) (err error) {
@@ -40,4 +42,35 @@ func (s *Service) CreateDirectory(directory models.Directory) (err error) {
 
 func (s *Service) GetDirectoryById(id, userId int) (models.Directory, error) {
 	return s.Repo.GetDirectoryById(id, userId)
+}
+
+func (s *Service) RenameDirectory(id, userId int, newDirName string) (err error) {
+	dir, err := s.Repo.GetDirectoryById(id, userId)
+	if err != nil {
+		s.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in service, RenameDirectory - GetDirectoryById")
+		return err
+	}
+
+	oldDirPath := filepath.Join("uploads", dir.Name)
+	newDirPath := filepath.Join("uploads", newDirName)
+
+	err = os.Rename(oldDirPath, newDirPath)
+	if err != nil {
+		s.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in service, RenameDirectory - os.Rename")
+		return err
+	}
+
+	err = s.Repo.RenameDirectory(id, userId, newDirName)
+	if err != nil {
+		s.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in service, RenameDirectory - RenameDirectory")
+		return err
+	}
+
+	return nil
 }

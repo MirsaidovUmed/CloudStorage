@@ -68,6 +68,7 @@ func (s *Service) Registration(user models.UserCreateDto) (err error) {
 
 	return nil
 }
+
 func (s *Service) Login(user models.UserCreateDto) (accessToken string, err error) {
 	userFromDb, err := s.Repo.GetUserByEmail(user.Email)
 	if err != nil {

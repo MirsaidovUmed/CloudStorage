@@ -74,3 +74,48 @@ func (s *Service) RenameDirectory(id, userId int, newDirName string) (err error)
 
 	return nil
 }
+
+func (s *Service) DeleteDirectory(id, userId int) (err error) {
+	dir, err := s.Repo.GetDirectoryById(id, userId)
+	if err != nil {
+		s.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error getting dir info in service, DeleteDirectory")
+		return err
+	}
+
+	files, err := s.Repo.GetFilesByDirectoryId(id, userId)
+	if err != nil {
+		s.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error getting files in directory in service, DeleteDirectory")
+		return err
+	}
+
+	for _, file := range files {
+		err = s.RemoveFile(file.Id, userId)
+		if err != nil {
+			return err
+		}
+	}
+
+	dirPath := filepath.Join("uploads", dir.Name)
+	err = os.RemoveAll(dirPath)
+	if err != nil {
+		s.Logger.WithFields(logrus.Fields{
+			"filePath": dirPath,
+			"err":      err,
+		}).Error("error removing directory from filesystem in service, DeleteDirectory")
+		return err
+	}
+
+	err = s.Repo.DeleteDirectory(id, userId)
+	if err != nil {
+		s.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error removing directory from database in service, DeleteDirectory")
+		return err
+	}
+
+	return nil
+}

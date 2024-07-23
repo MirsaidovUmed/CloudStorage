@@ -55,3 +55,39 @@ func (repo *Repository) RenameDirectory(id, userId int, newDirName string) (err 
 	}
 	return nil
 }
+
+func (repo *Repository) GetFilesByDirectoryId(directoryId, userId int) (files []models.File, err error) {
+	rows, err := repo.Conn.Query(context.Background(), `SELECT id, file_name, user_id, directory_id FROM files WHERE directory_id = $1 AND user_id = $2`, directoryId, userId)
+	if err != nil {
+		repo.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in repo, GetFilesByDirectoryId")
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var file models.File
+		err := rows.Scan(&file.Id, &file.FileName, &file.UserId, &file.DirectoryId)
+		if err != nil {
+			repo.Logger.WithFields(logrus.Fields{
+				"err": err,
+			}).Error("error scanning file in repo, GetFilesByDirectoryId")
+			return nil, err
+		}
+		files = append(files, file)
+	}
+
+	return files, nil
+}
+
+func (repo *Repository) DeleteDirectory(id, userId int) (err error) {
+	_, err = repo.Conn.Exec(context.Background(), `DELETE FROM directories WHERE id = $1 AND user_id = $2`, id, userId)
+	if err != nil {
+		repo.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in repo, DeleteDirectory")
+		return err
+	}
+	return nil
+}

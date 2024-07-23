@@ -31,6 +31,8 @@ type RepositoryInterface interface {
 	AdminUpdateUser(user models.UserUpdateDto) (err error)
 	AdminGetUserByID(id int) (user models.User, err error)
 	RenameDirectory(id, userId int, newDirName string) (err error)
+	GetFilesByDirectoryId(directoryId, userId int) (files []models.File, err error)
+	DeleteDirectory(id, userId int) (err error)
 }
 
 func NewRepository(conn *pgx.Conn, logger *logrus.Logger) RepositoryInterface {

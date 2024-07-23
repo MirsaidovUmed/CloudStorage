@@ -32,6 +32,8 @@ type ServiceInterface interface {
 	AdminUpdateUser(user models.UserUpdateDto) (err error)
 	AdminGetUserByID(id int) (user models.User, err error)
 	RenameDirectory(id, userId int, newDirName string) (err error)
+	GetDirectoryById(id, userId int) (models.Directory, error)
+	DeleteDirectory(id, userId int) (err error)
 }
 
 func NewService(repo repositories.RepositoryInterface, config *config.Config, logger *logrus.Logger) ServiceInterface {

@@ -30,6 +30,7 @@ type ServiceInterface interface {
 	AdminGetUserList() (users []models.User, err error)
 	CreateDirectory(directory models.Directory) (err error)
 	AdminUpdateUser(user models.UserUpdateDto) (err error)
+	AdminGetUserByID(id int) (user models.User, err error)
 }
 
 func NewService(repo repositories.RepositoryInterface, config *config.Config, logger *logrus.Logger) ServiceInterface {

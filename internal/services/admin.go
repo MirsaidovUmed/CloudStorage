@@ -16,7 +16,7 @@ func (s *Service) AdminGetUserList() (users []models.User, err error) {
 }
 
 func (s *Service) DeleteUser(userId int) (err error) {
-	_, err = s.Repo.GetUserByID(userId)
+	_, err = s.Repo.AdminGetUserByID(userId)
 	if err != nil {
 		if err == errors.ErrDataNotFound {
 			return errors.ErrUserNotFound
@@ -31,7 +31,7 @@ func (s *Service) DeleteUser(userId int) (err error) {
 }
 
 func (s *Service) AdminUpdateUser(user models.UserUpdateDto) (err error) {
-	existingUser, err := s.Repo.GetUserByID(user.Id)
+	existingUser, err := s.Repo.AdminGetUserByID(user.Id)
 	if err != nil {
 		return err
 	}
@@ -61,6 +61,14 @@ func (s *Service) AdminUpdateUser(user models.UserUpdateDto) (err error) {
 		existingUserUpdate.Password = string(hashedPassword)
 	}
 
-	err = s.Repo.UpdateUser(existingUserUpdate)
+	err = s.Repo.AdminUpdateUser(existingUserUpdate)
 	return err
+}
+
+func (s *Service) AdminGetUserByID(id int) (user models.User, err error) {
+	user, err = s.Repo.AdminGetUserByID(id)
+	if err != nil {
+		return
+	}
+	return user, nil
 }

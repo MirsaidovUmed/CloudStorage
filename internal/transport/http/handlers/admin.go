@@ -116,3 +116,31 @@ func (h *Handler) AdminUpdateUserById(w http.ResponseWriter, r *http.Request) {
 
 	resp = response.Success
 }
+
+func (h *Handler) AdminGetUserByID(w http.ResponseWriter, r *http.Request) {
+	var resp response.Response
+	defer resp.WriteJSON(w)
+
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		resp.Code = http.StatusBadRequest
+		resp.Message = "Invalid user ID"
+		return
+	}
+
+	user, err := h.svc.AdminGetUserByID(id)
+	if err != nil {
+		if err == errors.ErrDataNotFound {
+			resp = response.NotFound
+			return
+		}
+		resp = response.InternalServer
+		return
+	}
+
+	resp = response.Success
+	resp.Payload = user
+}

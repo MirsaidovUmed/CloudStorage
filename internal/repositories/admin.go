@@ -2,8 +2,10 @@ package repositories
 
 import (
 	"CloudStorage/internal/models"
+	"CloudStorage/pkg/errors"
 	"context"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/sirupsen/logrus"
 )
 
@@ -65,4 +67,19 @@ func (repo *Repository) AdminUpdateUser(user models.UserUpdateDto) (err error) {
 	}
 
 	return
+}
+
+func (repo *Repository) AdminGetUserByID(id int) (user models.User, err error) {
+	row := repo.Conn.QueryRow(context.Background(), `SELECT id, first_name, second_name, email, role_id, created_at FROM users WHERE id = $1`, id)
+
+	err = row.Scan(&user.Id, &user.FirstName, &user.SecondName, &user.Email, &user.Role.Id, &user.CreatedAt)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			err = errors.ErrDataNotFound
+		}
+		repo.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in repo, GetUserByID")
+	}
+	return user, err
 }

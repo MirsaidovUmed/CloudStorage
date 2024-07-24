@@ -34,6 +34,8 @@ type ServiceInterface interface {
 	RenameDirectory(id, userId int, newDirName string) (err error)
 	GetDirectoryById(id, userId int) (models.Directory, error)
 	DeleteDirectory(id, userId int) (err error)
+	ShareFile(userId, fileId, targetUserId int) error
+	GetFileAccessUsers(fileId int) ([]models.FileAccess, error)
 }
 
 func NewService(repo repositories.RepositoryInterface, config *config.Config, logger *logrus.Logger) ServiceInterface {

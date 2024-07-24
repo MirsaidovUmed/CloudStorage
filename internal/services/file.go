@@ -65,8 +65,8 @@ func (s *Service) RenameFile(id, userId int, newFileName string) (err error) {
 		return err
 	}
 
-	oldFilePath := filepath.Join("uploads", file.FileName)
-	newFilePath := filepath.Join("uploads", newFileName)
+	oldFilePath := filepath.Join("uploads", file.FileName) // скорее всего тут тоже надо будет изменить учитываю папки тоже
+	newFilePath := filepath.Join("uploads", newFileName)   // аналогично предыдущей строке
 
 	err = os.Rename(oldFilePath, newFilePath)
 	if err != nil {
@@ -96,7 +96,7 @@ func (s *Service) RemoveFile(id, userId int) error {
 		return err
 	}
 
-	filePath := filepath.Join("uploads", file.FileName)
+	filePath := filepath.Join("uploads", file.FileName) //надо исправить добавить местнахождение через папку тоже
 	err = os.Remove(filePath)
 	if err != nil {
 		s.Logger.WithFields(logrus.Fields{

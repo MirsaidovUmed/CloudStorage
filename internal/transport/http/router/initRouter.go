@@ -30,7 +30,7 @@ func InitRouter(handlers *handlers.Handler, mw middleware.MiddlewareInterface) *
 	privateRouter.HandleFunc("/files/rename/{id}", handlers.RenameFile).Methods("PUT")
 
 	privateRouter.HandleFunc("/directories/create", handlers.CreateDirectory).Methods("POST")
-	privateRouter.HandleFunc("/directories/rename", handlers.RenameDirectory).Methods("POST")
+	privateRouter.HandleFunc("/directories/rename/{id}", handlers.RenameDirectory).Methods("PUT")
 	privateRouter.HandleFunc("/directories/get/{id}", handlers.GetDirectoryById).Methods("Get")
 	privateRouter.HandleFunc("/directories/delete/{id}", handlers.DeleteDirectory).Methods("DELETE")
 

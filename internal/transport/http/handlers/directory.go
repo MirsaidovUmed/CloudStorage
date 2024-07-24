@@ -66,14 +66,14 @@ func (h *Handler) RenameDirectory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vars := mux.Vars(r)
-	fileID, err := strconv.Atoi(vars["id"])
+	dirId, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		resp = response.BadRequest
 		resp.Message = "Invalid directory ID"
 		return
 	}
 
-	err = h.svc.RenameDirectory(fileID, int(userID), req.NewFileName)
+	err = h.svc.RenameDirectory(dirId, int(userID), req.NewFileName)
 	if err != nil {
 		resp = response.InternalServer
 		resp.Message = "Unable to rename directory"

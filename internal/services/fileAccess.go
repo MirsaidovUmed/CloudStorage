@@ -2,6 +2,7 @@ package services
 
 import (
 	"CloudStorage/internal/models"
+	"CloudStorage/pkg/errors"
 	"fmt"
 
 	"github.com/sirupsen/logrus"
@@ -39,4 +40,28 @@ func (s *Service) GetFileAccessUsers(fileId int) ([]models.FileAccess, error) {
 		return nil, err
 	}
 	return users, nil
+}
+
+func (s *Service) DeleteFileAccess(fileId, userId int) (err error) {
+	_, err = s.Repo.AdminGetUserByID(userId)
+	if err != nil {
+		if err == errors.ErrDataNotFound {
+			return errors.ErrUserNotFound
+		}
+		return err
+	}
+
+	_, err = s.Repo.GetFileById(fileId, userId)
+	if err != nil {
+		if err == errors.ErrDataNotFound {
+			return errors.ErrUserNotFound
+		}
+		return err
+	}
+
+	err = s.Repo.DeleteFileAccess(fileId, userId)
+	if err != nil {
+		return err
+	}
+	return
 }

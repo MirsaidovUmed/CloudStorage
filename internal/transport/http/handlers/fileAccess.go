@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"CloudStorage/pkg/errors"
 	"CloudStorage/pkg/response"
 	"net/http"
 	"strconv"
@@ -66,4 +67,37 @@ func (h *Handler) GetFileAccessUsers(w http.ResponseWriter, r *http.Request) {
 
 	resp = response.Success
 	resp.Payload = users
+}
+
+func (h *Handler) DeleteFileAccess(w http.ResponseWriter, r *http.Request) {
+	var resp response.Response
+	defer resp.WriteJSON(w)
+
+	vars := mux.Vars(r)
+
+	fileId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		resp.Code = http.StatusBadRequest
+		resp.Message = "Invalid file ID"
+		return
+	}
+
+	userId, err := strconv.Atoi(vars["user_id"])
+	if err != nil {
+		resp.Code = http.StatusBadRequest
+		resp.Message = "Invalid user ID"
+		return
+	}
+
+	err = h.svc.DeleteFileAccess(fileId, userId)
+	if err != nil {
+		if err == errors.ErrUserNotFound {
+			resp = response.NotFound
+			return
+		}
+		resp = response.InternalServer
+		return
+	}
+
+	resp = response.Success
 }

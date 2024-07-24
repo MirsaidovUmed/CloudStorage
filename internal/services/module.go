@@ -36,6 +36,7 @@ type ServiceInterface interface {
 	DeleteDirectory(id, userId int) (err error)
 	ShareFile(userId, fileId, targetUserId int) error
 	GetFileAccessUsers(fileId int) ([]models.FileAccess, error)
+	DeleteFileAccess(fileId, userId int) (err error)
 }
 
 func NewService(repo repositories.RepositoryInterface, config *config.Config, logger *logrus.Logger) ServiceInterface {

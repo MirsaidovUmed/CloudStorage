@@ -35,6 +35,7 @@ type RepositoryInterface interface {
 	DeleteDirectory(id, userId int) (err error)
 	AddFileAccess(fileId, userId int) (err error)
 	GetFileAccessUsers(fileId int) (users []models.FileAccess, err error)
+	DeleteFileAccess(fileId, userId int) (err error)
 }
 
 func NewRepository(conn *pgx.Conn, logger *logrus.Logger) RepositoryInterface {

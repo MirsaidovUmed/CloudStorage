@@ -49,3 +49,14 @@ func (repo *Repository) GetFileAccessUsers(fileId int) (users []models.FileAcces
 
 	return users, nil
 }
+
+func (repo *Repository) DeleteFileAccess(fileId, userId int) (err error) {
+	_, err = repo.Conn.Exec(context.Background(), `DELETE FROM file_access where file_id = $1 and user_id = $2`, fileId, userId)
+	if err != nil {
+		repo.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in repo, DeleteFileAccess")
+		return err
+	}
+	return
+}

@@ -8,27 +8,23 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (s *Service) ShareFile(userId, fileId, targetUserId int) error {
-	file, err := s.Repo.GetFileById(fileId, userId)
+func (s *Service) ShareFile(grantorId, fileId, granteeId int) error {
+	file, err := s.Repo.GetFileById(fileId, grantorId)
 	if err != nil {
-		fmt.Println(1)
 		return fmt.Errorf("file not found: %w", err)
 	}
 
-	if file.UserId != userId {
-		fmt.Println("file.UserId = ", file.UserId, " userId = ", userId)
+	if file.UserId != grantorId {
 		return fmt.Errorf("user is not the owner of the file")
 	}
 
-	user, err := s.Repo.GetUserByID(targetUserId)
+	granteeFromDb, err := s.Repo.GetUserByID(granteeId)
 	if err != nil {
-		fmt.Println(3)
 		return fmt.Errorf("target user not found: %w", err)
 	}
 
-	err = s.Repo.AddFileAccess(fileId, user.Id)
+	err = s.Repo.AddFileAccess(grantorId, fileId, granteeFromDb.Id)
 	if err != nil {
-		fmt.Println(4)
 		return fmt.Errorf("failed to share file: %w", err)
 	}
 
@@ -46,8 +42,8 @@ func (s *Service) GetFileAccessUsers(fileId int) ([]models.FileAccess, error) {
 	return users, nil
 }
 
-func (s *Service) DeleteFileAccess(fileId, userId int) (err error) {
-	_, err = s.Repo.AdminGetUserByID(userId)
+func (s *Service) DeleteFileAccess(grantorId, fileId, granteeId int) (err error) {
+	_, err = s.Repo.GetUserByID(granteeId)
 	if err != nil {
 		if err == errors.ErrDataNotFound {
 			return errors.ErrUserNotFound
@@ -55,7 +51,7 @@ func (s *Service) DeleteFileAccess(fileId, userId int) (err error) {
 		return err
 	}
 
-	_, err = s.Repo.GetFileById(fileId, userId)
+	_, err = s.Repo.GetFileById(fileId, grantorId)
 	if err != nil {
 		if err == errors.ErrDataNotFound {
 			return errors.ErrUserNotFound
@@ -63,7 +59,7 @@ func (s *Service) DeleteFileAccess(fileId, userId int) (err error) {
 		return err
 	}
 
-	err = s.Repo.DeleteFileAccess(fileId, userId)
+	err = s.Repo.DeleteFileAccess(grantorId, fileId, granteeId)
 	if err != nil {
 		return err
 	}

@@ -75,6 +75,12 @@ func (h *Handler) DeleteFileAccess(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
+	grantorId, ok := context.Get(r, "user_id").(int64)
+	if !ok {
+		resp = response.Unauthorized
+		return
+	}
+
 	fileId, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		resp.Code = http.StatusBadRequest
@@ -82,14 +88,14 @@ func (h *Handler) DeleteFileAccess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userId, err := strconv.Atoi(vars["user_id"])
+	granteId, err := strconv.Atoi(vars["user_id"])
 	if err != nil {
 		resp.Code = http.StatusBadRequest
 		resp.Message = "Invalid user ID"
 		return
 	}
 
-	err = h.svc.DeleteFileAccess(fileId, userId)
+	err = h.svc.DeleteFileAccess(int(grantorId), fileId, granteId)
 	if err != nil {
 		if err == errors.ErrUserNotFound {
 			resp = response.NotFound

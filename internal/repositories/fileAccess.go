@@ -7,8 +7,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (repo *Repository) AddFileAccess(fileId, userId int) (err error) {
-	_, err = repo.Conn.Exec(context.Background(), `INSERT INTO file_access (file_id, user_id) VALUES ($1, $2)`, fileId, userId)
+func (repo *Repository) AddFileAccess(grantorId, fileId, granteeId int) (err error) {
+	_, err = repo.Conn.Exec(context.Background(), `INSERT INTO file_access (file_id, grantor_id, grantee_id) VALUES ($1, $2, $3)`, fileId, grantorId, granteeId)
 	if err != nil {
 		repo.Logger.WithFields(logrus.Fields{
 			"err": err,
@@ -19,7 +19,7 @@ func (repo *Repository) AddFileAccess(fileId, userId int) (err error) {
 }
 
 func (repo *Repository) GetFileAccessUsers(fileId int) (users []models.FileAccess, err error) {
-	rows, err := repo.Conn.Query(context.Background(), `SELECT user_id FROM file_access WHERE file_id = $1`, fileId)
+	rows, err := repo.Conn.Query(context.Background(), `SELECT grantee_id FROM file_access WHERE file_id = $1`, fileId)
 	if err != nil {
 		repo.Logger.WithFields(logrus.Fields{
 			"err": err,
@@ -50,8 +50,8 @@ func (repo *Repository) GetFileAccessUsers(fileId int) (users []models.FileAcces
 	return users, nil
 }
 
-func (repo *Repository) DeleteFileAccess(fileId, userId int) (err error) {
-	_, err = repo.Conn.Exec(context.Background(), `DELETE FROM file_access where file_id = $1 and user_id = $2`, fileId, userId)
+func (repo *Repository) DeleteFileAccess(grantorId, fileId, granteeId int) (err error) {
+	_, err = repo.Conn.Exec(context.Background(), `DELETE FROM file_access where file_id = $1 AND grantor_id = $2 and grantee_id = $3`, grantorId, fileId, granteeId)
 	if err != nil {
 		repo.Logger.WithFields(logrus.Fields{
 			"err": err,

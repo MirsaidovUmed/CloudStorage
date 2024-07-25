@@ -54,6 +54,7 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="files" row="user_id" />
 <relation table="directories" row="user_id" />
+<relation table="file_access" row="user_id" />
 </row>
 <row name="first_name" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
@@ -81,7 +82,8 @@
 <table x="620" y="114" name="files">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
-<default>NULL</default></row>
+<default>NULL</default><relation table="file_access" row="file_id" />
+</row>
 <row name="file_name" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
 <default>NULL</default></row>
@@ -122,6 +124,22 @@
 <part>id</part>
 <part>user_id</part>
 <part>parent_id</part>
+</key>
+</table>
+<table x="874" y="230" name="file_access">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="file_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="user_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+<part>file_id</part>
+<part>user_id</part>
 </key>
 </table>
 </sql>

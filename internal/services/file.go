@@ -110,7 +110,6 @@ func (s *Service) RemoveFile(id, userId int) error {
 	}
 
 	var filePath string
-	fmt.Println("id = ", file)
 	if file.DirectoryId == 0 {
 		filePath = filepath.Join("uploads", strconv.Itoa(userId), file.FileName)
 	} else {

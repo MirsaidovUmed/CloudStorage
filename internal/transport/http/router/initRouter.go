@@ -36,6 +36,6 @@ func InitRouter(handlers *handlers.Handler, mw middleware.MiddlewareInterface) *
 
 	privateRouter.HandleFunc("/files/share/{id}", handlers.GetFileAccessUsers).Methods("GET")
 	privateRouter.HandleFunc("/files/share/{id}/{user_id}", handlers.ShareFile).Methods("PUT")
-	privateRouter.HandleFunc("files/share/{id}/{user_id}", handlers.DeleteFileAccess).Methods("DELETE")
+	privateRouter.HandleFunc("/files/share/{id}/{user_id}", handlers.DeleteFileAccess).Methods("DELETE")
 	return router
 }

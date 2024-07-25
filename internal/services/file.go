@@ -65,8 +65,21 @@ func (s *Service) RenameFile(id, userId int, newFileName string) (err error) {
 		return err
 	}
 
-	oldFilePath := filepath.Join("uploads", file.FileName) // скорее всего тут тоже надо будет изменить учитываю папки тоже
-	newFilePath := filepath.Join("uploads", newFileName)   // аналогично предыдущей строке
+	var oldFilePath, newFilePath string
+	if file.DirectoryId == 0 {
+		oldFilePath = filepath.Join("uploads", strconv.Itoa(userId), file.FileName)
+		newFilePath = filepath.Join("uploads", strconv.Itoa(userId), newFileName)
+	} else {
+		dir, err := s.Repo.GetDirectoryById(file.DirectoryId, userId)
+		if err != nil {
+			s.Logger.WithFields(logrus.Fields{
+				"err": err,
+			}).Error("error in service, RenameFile - GetDirectoryById")
+			return err
+		}
+		oldFilePath = filepath.Join("uploads", strconv.Itoa(userId), dir.Name, file.FileName)
+		newFilePath = filepath.Join("uploads", strconv.Itoa(userId), dir.Name, newFileName)
+	}
 
 	err = os.Rename(oldFilePath, newFilePath)
 	if err != nil {
@@ -96,7 +109,21 @@ func (s *Service) RemoveFile(id, userId int) error {
 		return err
 	}
 
-	filePath := filepath.Join("uploads", file.FileName) //надо исправить добавить местнахождение через папку тоже
+	var filePath string
+	fmt.Println("id = ", file)
+	if file.DirectoryId == 0 {
+		filePath = filepath.Join("uploads", strconv.Itoa(userId), file.FileName)
+	} else {
+		dir, err := s.Repo.GetDirectoryById(file.DirectoryId, userId)
+		if err != nil {
+			s.Logger.WithFields(logrus.Fields{
+				"err": err,
+			}).Error("error in service, RemoveFile - GetDirectoryById")
+			return err
+		}
+		filePath = filepath.Join("uploads", strconv.Itoa(userId), dir.Name, file.FileName)
+	}
+
 	err = os.Remove(filePath)
 	if err != nil {
 		s.Logger.WithFields(logrus.Fields{

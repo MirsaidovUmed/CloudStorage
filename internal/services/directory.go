@@ -53,8 +53,8 @@ func (s *Service) RenameDirectory(id, userId int, newDirName string) (err error)
 		return err
 	}
 
-	oldDirPath := filepath.Join("uploads", dir.Name)
-	newDirPath := filepath.Join("uploads", newDirName)
+	oldDirPath := filepath.Join("uploads", strconv.Itoa(userId), dir.Name)
+	newDirPath := filepath.Join("uploads", strconv.Itoa(userId), newDirName)
 
 	err = os.Rename(oldDirPath, newDirPath)
 	if err != nil {
@@ -99,7 +99,7 @@ func (s *Service) DeleteDirectory(id, userId int) (err error) {
 		}
 	}
 
-	dirPath := filepath.Join("uploads", dir.Name)
+	dirPath := filepath.Join("uploads", strconv.Itoa(userId), dir.Name)
 	err = os.RemoveAll(dirPath)
 	if err != nil {
 		s.Logger.WithFields(logrus.Fields{

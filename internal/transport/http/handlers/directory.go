@@ -129,12 +129,14 @@ func (h *Handler) DeleteDirectory(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		resp = response.BadRequest
 		resp.Message = "Invalid dir Id"
+		return
 	}
 
 	err = h.svc.DeleteDirectory(dirId, int(userId))
 	if err != nil {
 		resp = response.InternalServer
 		resp.Message = "Unable to delete directory"
+		return
 	}
 
 	resp = response.Success

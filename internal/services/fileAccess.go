@@ -11,20 +11,24 @@ import (
 func (s *Service) ShareFile(userId, fileId, targetUserId int) error {
 	file, err := s.Repo.GetFileById(fileId, userId)
 	if err != nil {
+		fmt.Println(1)
 		return fmt.Errorf("file not found: %w", err)
 	}
 
 	if file.UserId != userId {
+		fmt.Println("file.UserId = ", file.UserId, " userId = ", userId)
 		return fmt.Errorf("user is not the owner of the file")
 	}
 
 	user, err := s.Repo.GetUserByID(targetUserId)
 	if err != nil {
+		fmt.Println(3)
 		return fmt.Errorf("target user not found: %w", err)
 	}
 
 	err = s.Repo.AddFileAccess(fileId, user.Id)
 	if err != nil {
+		fmt.Println(4)
 		return fmt.Errorf("failed to share file: %w", err)
 	}
 

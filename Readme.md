@@ -76,11 +76,13 @@ The project uses the following libraries:
 
 The project was developed using the following tools:
 
-- ![Go](https://github.com/devicons/devicon/blob/master/icons/go/go-original-wordmark.svg) Go
-- ![PostgreSQL](https://github.com/devicons/devicon/blob/master/icons/postgresql/postgresql-original.svg) PostgreSQL
-- ![Postman](https://github.com/devicons/devicon/blob/master/icons/postman/postman-original.svg) Postman
-- ![GitHub](https://github.com/devicons/devicon/blob/master/icons/github/github-original-wordmark.svg) GitHub
-- ![VSCode](https://github.com/devicons/devicon/blob/master/icons/vscode/vscode-original.svg) VSCode
+<div>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/go/go-original-wordmark.svg" title="Go" alt="Golang" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/postgresql/postgresql-original.svg" title="PostgreSQL" alt="PostgreSQL" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/postman/postman-original.svg" title="Postman" alt="Postman" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/github/github-original-wordmark.svg" title="github" alt="github" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/vscode/vscode-original.svg" title="VScode" alt="VScode" width="40" height="40"/>&nbsp;
+</div>
 
 ## API Endpoints
 

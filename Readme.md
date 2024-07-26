@@ -72,6 +72,16 @@ The project uses the following libraries:
 - [github.com/sirupsen/logrus v1.9.3](https://github.com/sirupsen/logrus) - For logging
 - [golang.org/x/crypto v0.19.0/](https://pkg.go.dev/golang.org/x/crypto) - For cryptographic functions
 
+## Development Tools
+
+The project was developed using the following tools:
+
+- ![Go](https://github.com/devicons/devicon/blob/master/icons/go/go-original-wordmark.svg) Go
+- ![PostgreSQL](https://github.com/devicons/devicon/blob/master/icons/postgresql/postgresql-original.svg) PostgreSQL
+- ![Postman](https://github.com/devicons/devicon/blob/master/icons/postman/postman-original.svg) Postman
+- ![GitHub](https://github.com/devicons/devicon/blob/master/icons/github/github-original-wordmark.svg) GitHub
+- ![VSCode](https://github.com/devicons/devicon/blob/master/icons/vscode/vscode-original.svg) VSCode
+
 ## API Endpoints
 
 ### User Endpoints

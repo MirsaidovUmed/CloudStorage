@@ -65,18 +65,24 @@ func (s *Service) RenameFile(id, userId int, newFileName string) (err error) {
 		return err
 	}
 
+	ext := filepath.Ext(file.FileName)
+	if filepath.Ext(newFileName) == "" {
+		newFileName += ext
+	}
+
 	var oldFilePath, newFilePath string
-	if file.DirectoryId == 0 {
+	dir, err := s.Repo.GetDirectoryById(file.DirectoryId, userId)
+	if err != nil {
+		s.Logger.WithFields(logrus.Fields{
+			"err": err,
+		}).Error("error in service, RenameFile - GetDirectoryById")
+		return err
+	}
+
+	if dir.ParentId == nil {
 		oldFilePath = filepath.Join("uploads", strconv.Itoa(userId), file.FileName)
 		newFilePath = filepath.Join("uploads", strconv.Itoa(userId), newFileName)
 	} else {
-		dir, err := s.Repo.GetDirectoryById(file.DirectoryId, userId)
-		if err != nil {
-			s.Logger.WithFields(logrus.Fields{
-				"err": err,
-			}).Error("error in service, RenameFile - GetDirectoryById")
-			return err
-		}
 		oldFilePath = filepath.Join("uploads", strconv.Itoa(userId), dir.Name, file.FileName)
 		newFilePath = filepath.Join("uploads", strconv.Itoa(userId), dir.Name, newFileName)
 	}
@@ -99,7 +105,6 @@ func (s *Service) RenameFile(id, userId int, newFileName string) (err error) {
 
 	return nil
 }
-
 func (s *Service) RemoveFile(id, userId int) error {
 	file, err := s.Repo.GetFileById(id, userId)
 	if err != nil {

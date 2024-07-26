@@ -2,6 +2,7 @@ package services
 
 import (
 	"CloudStorage/internal/models"
+	"CloudStorage/pkg/constants"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -15,14 +16,14 @@ import (
 func (s *Service) UploadFile(userID int, directoryID int, file multipart.File, header *multipart.FileHeader) (err error) {
 	var uploadDir string
 	if directoryID == 0 {
-		uploadDir = filepath.Join("uploads", strconv.Itoa(userID))
+		uploadDir = filepath.Join(constants.Uploads, strconv.Itoa(userID))
 		directoryID, err = s.Repo.GetRootDirectoryByUserId(userID)
 	} else {
 		directory, err := s.GetDirectoryById(directoryID, userID)
 		if err != nil {
 			return err
 		}
-		uploadDir = filepath.Join("uploads", strconv.Itoa(userID), directory.Name)
+		uploadDir = filepath.Join(constants.Uploads, strconv.Itoa(userID), directory.Name)
 	}
 
 	err = os.MkdirAll(uploadDir, os.ModePerm)
@@ -80,11 +81,11 @@ func (s *Service) RenameFile(id, userId int, newFileName string) (err error) {
 	}
 
 	if dir.ParentId == nil {
-		oldFilePath = filepath.Join("uploads", strconv.Itoa(userId), file.FileName)
-		newFilePath = filepath.Join("uploads", strconv.Itoa(userId), newFileName)
+		oldFilePath = filepath.Join(constants.Uploads, strconv.Itoa(userId), file.FileName)
+		newFilePath = filepath.Join(constants.Uploads, strconv.Itoa(userId), newFileName)
 	} else {
-		oldFilePath = filepath.Join("uploads", strconv.Itoa(userId), dir.Name, file.FileName)
-		newFilePath = filepath.Join("uploads", strconv.Itoa(userId), dir.Name, newFileName)
+		oldFilePath = filepath.Join(constants.Uploads, strconv.Itoa(userId), dir.Name, file.FileName)
+		newFilePath = filepath.Join(constants.Uploads, strconv.Itoa(userId), dir.Name, newFileName)
 	}
 
 	err = os.Rename(oldFilePath, newFilePath)
@@ -116,7 +117,7 @@ func (s *Service) RemoveFile(id, userId int) error {
 
 	var filePath string
 	if file.DirectoryId == 0 {
-		filePath = filepath.Join("uploads", strconv.Itoa(userId), file.FileName)
+		filePath = filepath.Join(constants.Uploads, strconv.Itoa(userId), file.FileName)
 	} else {
 		dir, err := s.Repo.GetDirectoryById(file.DirectoryId, userId)
 		if err != nil {
@@ -125,7 +126,7 @@ func (s *Service) RemoveFile(id, userId int) error {
 			}).Error("error in service, RemoveFile - GetDirectoryById")
 			return err
 		}
-		filePath = filepath.Join("uploads", strconv.Itoa(userId), dir.Name, file.FileName)
+		filePath = filepath.Join(constants.Uploads, strconv.Itoa(userId), dir.Name, file.FileName)
 	}
 
 	err = os.Remove(filePath)

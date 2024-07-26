@@ -44,7 +44,7 @@ func (h *Handler) CreateDirectory(w http.ResponseWriter, r *http.Request) {
 }
 
 type RenameDirRequest struct {
-	NewFileName string `json:"new_dir_name" validate:"required"`
+	NewDirName string `json:"new_dir_name" validate:"required"`
 }
 
 func (h *Handler) RenameDirectory(w http.ResponseWriter, r *http.Request) {
@@ -73,7 +73,7 @@ func (h *Handler) RenameDirectory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.svc.RenameDirectory(dirId, int(userID), req.NewFileName)
+	err = h.svc.RenameDirectory(dirId, int(userID), req.NewDirName)
 	if err != nil {
 		resp = response.InternalServer
 		resp.Message = "Unable to rename directory"

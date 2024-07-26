@@ -2,6 +2,7 @@ package services
 
 import (
 	"CloudStorage/internal/models"
+	"CloudStorage/pkg/constants"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -13,13 +14,13 @@ import (
 func (s *Service) CreateDirectory(directory models.Directory) (err error) {
 	var parentDir string
 	if directory.ParentId == nil {
-		parentDir = filepath.Join("uploads", strconv.Itoa(directory.UserId))
+		parentDir = filepath.Join(constants.Uploads, strconv.Itoa(directory.UserId))
 	} else {
 		parentDirectory, err := s.GetDirectoryById(*directory.ParentId, directory.UserId)
 		if err != nil {
 			return err
 		}
-		parentDir = filepath.Join("uploads", strconv.Itoa(directory.UserId), parentDirectory.Name)
+		parentDir = filepath.Join(constants.Uploads, strconv.Itoa(directory.UserId), parentDirectory.Name)
 	}
 
 	newDirPath := filepath.Join(parentDir, directory.Name)
@@ -53,8 +54,8 @@ func (s *Service) RenameDirectory(id, userId int, newDirName string) (err error)
 		return err
 	}
 
-	oldDirPath := filepath.Join("uploads", strconv.Itoa(userId), dir.Name)
-	newDirPath := filepath.Join("uploads", strconv.Itoa(userId), newDirName)
+	oldDirPath := filepath.Join(constants.Uploads, strconv.Itoa(userId), dir.Name)
+	newDirPath := filepath.Join(constants.Uploads, strconv.Itoa(userId), newDirName)
 
 	err = os.Rename(oldDirPath, newDirPath)
 	if err != nil {
@@ -99,7 +100,7 @@ func (s *Service) DeleteDirectory(id, userId int) (err error) {
 		}
 	}
 
-	dirPath := filepath.Join("uploads", strconv.Itoa(userId), dir.Name)
+	dirPath := filepath.Join(constants.Uploads, strconv.Itoa(userId), dir.Name)
 	err = os.RemoveAll(dirPath)
 	if err != nil {
 		s.Logger.WithFields(logrus.Fields{

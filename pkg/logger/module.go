@@ -3,6 +3,7 @@ package logger
 import (
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/mattn/go-colorable"
 	"github.com/sirupsen/logrus"
@@ -25,24 +26,32 @@ func init() {
 		FullTimestamp: true,
 	})
 
-	infoFile, err := os.OpenFile("./logs/info.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logDir := "./logs"
+	err := os.MkdirAll(logDir, os.ModePerm)
 	if err != nil {
+		logrus.Fatal("Не удалось создать директорию logs", err)
+	}
+
+	infoFile, err := os.OpenFile(filepath.Join(logDir, "info.log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		wd, _ := os.Getwd()
+		logrus.Infof("Current working directory: %s", wd)
 		logrus.Fatal("Не удалось создать файл info.log", err)
 	}
 
-	debugFile, err := os.OpenFile("./logs/debug.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	debugFile, err := os.OpenFile(filepath.Join(logDir, "debug.log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		logrus.Fatal("Не удалось создать файл debug.log", err)
 	}
 
-	errorFile, err := os.OpenFile("./logs/error.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	errorFile, err := os.OpenFile(filepath.Join(logDir, "error.log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		logrus.Fatal("Не удалось создать файл error.log", err)
 	}
 
-	warnFile, err := os.OpenFile("./logs/warn.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	warnFile, err := os.OpenFile(filepath.Join(logDir, "warn.log"), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		logrus.Fatal("Не удалось создать файл warn.log: ", err)
+		logrus.Fatal("Не удалось создать файл warn.log", err)
 	}
 
 	logger.AddHook(&fileHook{

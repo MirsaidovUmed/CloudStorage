@@ -1,6 +1,6 @@
 {
     "server_address" : "0.0.0.0",
     "server_port":8080,
-    "postgres_url" : "postgres://postgres:postgres@192.168.123.39:5432/cloud_storage",
+    "postgres_url" : "postgres://postgres:postgres@ipconfig:5432/cloud_storage",
     "jwt_secret_key" : "super super super secret key"
 }

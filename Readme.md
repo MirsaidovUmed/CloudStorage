@@ -29,6 +29,12 @@ CloudStorage is a file-sharing application developed using Go version 1.22.5. It
 4. Set up the PostgreSQL database and create the necessary tables:
     ```sql
     CREATE DATABASE cloud_storage;
+   
+   CREATE TABLE roles
+   (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(10) NOT NULL
+   );
 
     CREATE TABLE users
     (
@@ -40,20 +46,20 @@ CloudStorage is a file-sharing application developed using Go version 1.22.5. It
         role_id     INT REFERENCES roles (id),
         created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+   
+   CREATE TABLE directories (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        user_id INT REFERENCES users(id),
+        parent_id 	INT REFERENCES directories (id) ON DELETE CASCADE,
+        created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
 
     CREATE TABLE files (
         id SERIAL PRIMARY KEY,
         file_name VARCHAR(255) NOT NULL,
         user_id INT REFERENCES users(id),
-        directory_id INT REFERENCES directories(id)
-        created_at  TIMESTAMP CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE directories (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        user_id INT REFERENCES users(id)
-        parent_id 	INT REFERENCES directories (id) ON DELETE CASCADE,
+        directory_id INT REFERENCES directories (id),
         created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -63,6 +69,9 @@ CloudStorage is a file-sharing application developed using Go version 1.22.5. It
         grantor_id INT REFERENCES users(id),
         grantee_id INT REFERENCES users(id)
     );
+   
+   INSERT INTO Roles (name) 
+   VALUES('admin'), ('user');
     ```
 5. Run the application:
     ```sh
